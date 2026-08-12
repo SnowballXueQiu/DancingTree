@@ -31,7 +31,8 @@ public final class SneakListener implements Listener {
         int required = Math.max(1, plugin.getConfig().getInt("sneaks-required", 8));
         if (count < required) return;
         sessions.reset(player.getUniqueId(), sapling.getLocation());
-        if (growth.canGrow(sapling)) growth.grow(sapling);
+        // Native Paper bonemeal performs the exact vanilla ground/space/growth checks.
+        growth.applyBonemeal(sapling);
     }
 
     @EventHandler public void onQuit(PlayerQuitEvent event) { sessions.removePlayer(event.getPlayer().getUniqueId()); }
