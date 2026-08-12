@@ -31,8 +31,11 @@ public final class SneakListener implements Listener {
         int required = Math.max(1, plugin.getConfig().getInt("sneaks-required", 8));
         if (count < required) return;
         sessions.reset(player.getUniqueId(), sapling.getLocation());
-        // Native Paper bonemeal performs the exact vanilla ground/space/growth checks.
-        growth.applyBonemeal(sapling);
+        // Apply native bonemeal several times. Vanilla has a random success chance;
+        // retrying keeps the dance deterministic without bypassing vanilla checks.
+        for (int attempt = 0; attempt < 8 && growth.isSapling(sapling); attempt++) {
+            if (!growth.applyBonemeal(sapling)) break;
+        }
     }
 
     @EventHandler public void onQuit(PlayerQuitEvent event) { sessions.removePlayer(event.getPlayer().getUniqueId()); }
