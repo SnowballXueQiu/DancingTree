@@ -1,0 +1,6 @@
+name: DancingTree
+version: '${version}'
+main: net.infnetwork.snowball.dancingtree.DancingTreePlugin
+api-version: '1.20'
+author: Snowball_233
+description: 在树苗旁跳舞，用坚持让可以正常生长的树苗快速长成大树。

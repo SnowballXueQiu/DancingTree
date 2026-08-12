@@ -1,0 +1,4 @@
+sneaks-required: 8
+interaction-range: 3.0
+session-timeout-seconds: 5
+growth-cooldown-seconds: 2

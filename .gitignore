@@ -1,0 +1,11 @@
+.gradle/
+build/
+out/
+run/
+eula.txt
+server.properties
+*.log
+*.jar
+.idea/
+*.iml
+.DS_Store
