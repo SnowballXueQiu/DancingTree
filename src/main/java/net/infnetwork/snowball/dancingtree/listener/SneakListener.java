@@ -36,6 +36,7 @@ public final class SneakListener implements Listener {
         for (int attempt = 0; attempt < 8 && growth.isSapling(sapling); attempt++) {
             if (!growth.applyBonemeal(sapling)) break;
         }
+        if (growth.isSapling(sapling)) growth.generateTree(sapling);
     }
 
     @EventHandler public void onQuit(PlayerQuitEvent event) { sessions.removePlayer(event.getPlayer().getUniqueId()); }
