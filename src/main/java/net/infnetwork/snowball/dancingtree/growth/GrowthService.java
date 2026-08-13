@@ -17,9 +17,21 @@ public final class GrowthService {
         return sapling.applyBoneMeal(BlockFace.UP);
     }
 
+    /** Returns the 2x2 origin for dark oak, or null when its four saplings are absent. */
+    public Block growthOrigin(Block sapling) {
+        if (sapling.getType() != Material.DARK_OAK_SAPLING) return sapling;
+        for (int x = -1; x <= 0; x++) {
+            for (int z = -1; z <= 0; z++) {
+                Block origin = sapling.getRelative(x, 0, z);
+                if (isDarkOakSquare(origin)) return origin;
+            }
+        }
+        return null;
+    }
+
     public boolean generateTree(Block sapling) {
         TreeType type = treeType(sapling.getType());
-        if (type == null || !hasVanillaSoil(sapling)) return false;
+        if (type == null || !hasVanillaSoil(sapling) || growthOrigin(sapling) == null) return false;
         BlockData original = sapling.getBlockData().clone();
         sapling.setType(Material.AIR, false);
         boolean generated = sapling.getWorld().generateTree(sapling.getLocation(), type);
@@ -41,6 +53,15 @@ public final class GrowthService {
             case DIRT, GRASS_BLOCK, PODZOL, MYCELIUM, MOSS_BLOCK, ROOTED_DIRT, MUD, FARMLAND -> true;
             default -> false;
         };
+    }
+
+    private boolean isDarkOakSquare(Block origin) {
+        for (int x = 0; x < 2; x++) {
+            for (int z = 0; z < 2; z++) {
+                if (origin.getRelative(x, 0, z).getType() != Material.DARK_OAK_SAPLING) return false;
+            }
+        }
+        return hasVanillaSoil(origin);
     }
 
     private TreeType treeType(Material material) {

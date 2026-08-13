@@ -31,12 +31,14 @@ public final class SneakListener implements Listener {
         int required = Math.max(1, plugin.getConfig().getInt("sneaks-required", 8));
         if (count < required) return;
         sessions.reset(player.getUniqueId(), sapling.getLocation());
+        Block growthOrigin = growth.growthOrigin(sapling);
+        if (growthOrigin == null) return;
         // Apply native bonemeal several times. Vanilla has a random success chance;
         // retrying keeps the dance deterministic without bypassing vanilla checks.
-        for (int attempt = 0; attempt < 8 && growth.isSapling(sapling); attempt++) {
-            if (!growth.applyBonemeal(sapling)) break;
+        for (int attempt = 0; attempt < 8 && growth.isSapling(growthOrigin); attempt++) {
+            if (!growth.applyBonemeal(growthOrigin)) break;
         }
-        if (growth.isSapling(sapling)) growth.generateTree(sapling);
+        if (growth.isSapling(growthOrigin)) growth.generateTree(growthOrigin);
     }
 
     @EventHandler public void onQuit(PlayerQuitEvent event) { sessions.removePlayer(event.getPlayer().getUniqueId()); }
